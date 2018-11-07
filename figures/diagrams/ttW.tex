@@ -1,0 +1,20 @@
+\begin{tikzpicture}
+  \begin{feynman}
+    \vertex (v1);
+
+    \vertex[left=of v1] (v6);
+    \vertex[above=of v6] (v7);
+    \vertex[above left=of v7] (p7) {\(\overline \Pq^\prime\)};
+    \vertex[above right=of v7] (v8) {\(\PW^+\)};
+    \vertex[below left=of v6] (p10) {\(\Pq\)};
+    \vertex[above right=of v1] (p11) {\(\Ptop\)};
+    \vertex[below right=of v1] (p12) {\(\overline \Ptop\)};
+
+    \diagram* {
+      (p7) -- [anti fermion] (v7) -- [anti fermion] (v6),
+      (p10) -- [fermion] (v6) -- [gluon, edge label=\(\Pg\)] (v1),
+      (v8) -- [boson] (v7),
+      (p11) -- [fermion] (v1) -- [fermion] (p12),
+    };
+  \end{feynman}
+\end{tikzpicture}

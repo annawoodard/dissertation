@@ -1,0 +1,39 @@
+\tikzfeynmanset{
+  small,
+}
+\begin{tikzpicture}
+  \begin{feynman}
+    \diagram [horizontal'=v1 to p4,tree layout,sibling distance=6mm,level distance=15mm] {
+      v1 -- [fermion,edge label'=\(\Ptop\)] v3
+         -- [fermion] p1 [particle=\(\Pb\)],
+      v3 -- [boson,edge label=\(\PW^+\)] v5
+         -- [fermion] p2 [particle=\(\Pq\)],
+      v5 -- [anti fermion] p3 [particle=\(\overline \Pq^\prime\)],
+      v1 -- [boson,edge label=\(\PZ\)] v4
+         -- [fermion] p4 [particle=\(\Plep^-\)],
+         v4 -- [anti fermion] p5 [particle={\(\Plep^+\)}],
+    };
+
+    \vertex[left=20mm of v1] (v6);
+    \vertex[above=20mm of v6] (v7);
+    \vertex[above left=4mm and 20mm of v7] (p7) {\(\Pg\)};
+    \vertex[above right=4mm and 20mm of v7] (v8);
+    \vertex[above right=4mm and 20mm of v8] (p8) {\(\overline \Pb\)};
+    \vertex[below right=4mm and 20mm of v8] (p9);
+    \vertex[below left=4mm and 20mm of v6] (p10) {\(\Pg\)};
+    \vertex[below right=4mm and 20mm of p9] (p11) {\(\Pq\)};
+    \vertex[above right=4mm and 20mm of p9] (p12) {\(\overline \Pq^\prime\)};
+
+    \diagram* {
+      (p7) -- [gluon] (v7) -- [fermion] (v6),
+      (p11) -- [anti fermion] (p9) -- [anti fermion] (p12),
+      (p10) -- [gluon] (v6) -- [fermion, edge label=\(\Ptop\)] (v1),
+      (p8) -- [fermion] (v8) -- [boson, edge label=\(\PW^-\)] (p9),
+      (v8) -- [fermion, edge label=\(\overline \Ptop\)] (v7),
+    };
+  \end{feynman}
+  \begin{pgfonlayer}{background}
+      \node[fill=blue,fill opacity=0.4,circle,inner sep=1mm,fit=(p4)] {};
+      \node[fill=blue,fill opacity=0.4,circle,inner sep=1mm,fit=(p5)] {};
+  \end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,401 @@
+% To compile, use: latexmk -pvc -lualatex dissertation -latexoption="--shell-escape"
+%\documentclass[draft,12pt]{nddiss2e}
+% \documentclass[final,12pt]{nddiss2e}
+\documentclass[noinfo,final,nonatbib]{nddiss2e}
+% \usepackage{showframe}
+\usepackage{mdframed}
+\usepackage{colortbl}
+\usepackage{amssymb}
+\usepackage{afterpage}
+\usepackage{bigdelim}
+\usepackage{listings}
+\usepackage{makecell}
+\usepackage{microtype}
+\usepackage{multirow}
+\usepackage{newunicodechar}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{physics}
+\usepackage{polyglossia}
+\usepackage{minted}
+\surroundwithmdframed[linewidth=2pt]{minted}
+\usepackage[
+  type={CC},
+  modifier={by-sa},
+  version={4.0},
+]{doclicense}
+
+\let\abs\relax
+\usepackage{siunitx}
+
+\usepackage[noabbrev,nameinlink,capitalize]{cleveref}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[subfigure]{subrefformat=simple,labelformat=simple}
+    \renewcommand\thesubfigure{(\alph{subfigure})}
+
+\usepackage[flushleft]{threeparttablex}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\usepackage{tabulary}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{K}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{Z}{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}X}
+\usepackage{xpatch}
+\usepackage[subtle]{savetrees}
+\AtBeginDocument{\thinmuskip = 3mu}
+
+\usepackage[disable]{todonotes}
+\usepackage{accents}
+\usepackage{csquotes}
+\usepackage{unicode-math}
+
+\lstset{
+  basicstyle=\ttfamily,
+}
+
+\sisetup{
+  range-phrase=--,
+  range-units=single,
+  group-minimum-digits=4,
+  multi-part-units=single,
+  separate-uncertainty,
+	table-number-alignment=center,
+}
+\interfootnotelinepenalty=10000
+\usetikzlibrary{arrows,calc,fit,positioning,shapes}
+
+\usepackage{mathtools}
+\usepackage{autonum} % only number labeled equations
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+\overfullrule=0pt
+\usepackage[giveninits=true,isbn=false,sorting=none]{biblatex}
+
+\AtEveryBibitem{%
+  \clearlist{language}%
+  \ifentrytype{book}{\clearfield{url}}{}%
+  \clearlist{abstract}%
+  \clearfield{eprintclass}%
+  \clearfield{note}
+}
+\DeclareFieldFormat{labelnumberwidth}{#1\adddot}
+% \DeclareFieldFormat{url}{\printtext{URL}\space\href{#1}{\nolinkurl{#1}}}
+% \DeclareFieldFormat{doi}{\printtext{DOI}\addcolon\space\href{http://dx.doi.org/#1}{\nolinkurl{#1}}}
+\DeclareFieldFormat{shorturl}{\nolinkurl{#1}}
+\DeclareFieldFormat{url}{%
+  \href{#1}{\printfield{shorturl}}}
+\DeclareFieldFormat{doi}{\href{http://dx.doi.org/#1}{\nolinkurl{doi:#1}}}
+\DeclareFieldFormat{eprint:arxiv}{%
+  \ifhyperref
+    {\href{http://arxiv.org/abs/#1}{%
+       \nolinkurl{arxiv:#1}%
+       \iffieldundef{eprintclass}
+         {}
+         {\addspace\texttt{\mkbibbrackets{\thefield{eprintclass}}}}}}
+    {\nolinkurl{arxiv:#1}
+     \iffieldundef{eprintclass}
+       {}
+       {\addspace\texttt{\mkbibbrackets{\thefield{eprintclass}}}}}}
+\setcounter{biburllcpenalty}{9000}
+\setcounter{biburlucpenalty}{9000}
+\setcounter{biburlnumpenalty}{9000}
+\setlength\bibitemsep{\baselineskip}
+
+\renewbibmacro*{in:}{%
+  \printtext{%
+    \bibstring{In}\intitlepunct}}
+\renewbibmacro*{doi+eprint+url}{%
+  \iftoggle{bbx:url}
+    {\iffieldundef{doi}{\usebibmacro{url+urldate}}{}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:eprint}
+    {\iffieldundef{doi}{\usebibmacro{eprint}}{}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:doi}
+    {\printfield{doi}}
+    {}}
+
+\addbibresource{dissertation.bib}
+
+% Remove the abstract.
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map[overwrite=true]{
+      \step[fieldset=abstract, null]
+    }
+    \map[overwrite=true]{
+      \step[fieldsource=url]
+      \step[fieldset=shorturl, origfieldval]
+      \step[fieldsource=shorturl, match=\regexp{https?://}, replace={}]
+    }
+  }
+}
+
+\DeclareDocumentCommand\Pe{}{\ensuremath{e}\xspace}
+\DeclareDocumentCommand\Pp{}{\ensuremath{\text{p}}\xspace}
+\DeclareDocumentCommand\Pg{}{\ensuremath{\text{g}}\xspace}
+\DeclareDocumentCommand\Pnu{}{\ensuremath{\nu}\xspace}
+\DeclareDocumentCommand\Pmu{}{\ensuremath{\mu}\xspace}
+\DeclareDocumentCommand\Ptau{}{\ensuremath{\tau}\xspace}
+\DeclareDocumentCommand\Ptop{}{\ensuremath{\text{t}}\xspace}
+\DeclareDocumentCommand\Ptopbar{}{\ensuremath{\bar{\text{t}}}\xspace}
+\DeclareDocumentCommand\Ppi{}{\ensuremath{\pi}\xspace}
+\DeclareDocumentCommand\Pb{}{\ensuremath{\text{b}}\xspace}
+\DeclareDocumentCommand\Pd{}{\ensuremath{\text{d}}\xspace}
+\DeclareDocumentCommand\Pc{}{\ensuremath{\text{c}}\xspace}
+\DeclareDocumentCommand\Ps{}{\ensuremath{\text{s}}\xspace}
+\DeclareDocumentCommand\Pu{}{\ensuremath{\text{u}}\xspace}
+\DeclareDocumentCommand\PW{}{\ensuremath{\text{W}}\xspace}
+\DeclareDocumentCommand\PH{}{\ensuremath{\text{H}}\xspace}
+\DeclareDocumentCommand\PZ{}{\ensuremath{\text{Z}}\xspace}
+\DeclareDocumentCommand\Phad{}{\ensuremath{h}\xspace}
+\DeclareDocumentCommand\Ptauh{}{\Ptau_\Phad\xspace}
+\DeclareDocumentCommand\Pkaon{}{\ensuremath{K}\xspace}
+\DeclareDocumentCommand\Pb{}{\ensuremath{\text{b}}\xspace}
+\DeclareDocumentCommand\Pq{}{\ensuremath{\text{q}}\xspace}
+\DeclareDocumentCommand\Pqbar{}{\ensuremath{\bar{\text{q}}}\xspace}
+\DeclareDocumentCommand\Pbbar{}{\ensuremath{\bar{\text{b}}}\xspace}
+\DeclareDocumentCommand\lep{}{\ensuremath{{\ell}}\xspace}
+\DeclareDocumentCommand\ttH{}{\ensuremath{\Ptop\bar{\Ptop}\PH}\xspace}
+\DeclareDocumentCommand\ttZ{}{\ensuremath{\Ptop\bar{\Ptop}\PZ}\xspace}
+\DeclareDocumentCommand\ttW{}{\ensuremath{\Ptop\bar{\Ptop}\PW}\xspace}
+\DeclareDocumentCommand\ttbar{}{\ensuremath{\Ptop\bar{\Ptop}}\xspace}
+\DeclareDocumentCommand\qqbar{}{\ensuremath{\Pq\Pqbar}\xspace}
+\DeclareDocumentCommand\bbbar{}{\ensuremath{\text{b}\bar{\text{b}}}\xspace}
+\DeclareDocumentCommand\ccbar{}{\ensuremath{\text{b}\bar{\text{b}}}\xspace}
+\DeclareDocumentCommand\ttX{}{\ensuremath{\Ptop(\bar{\Ptop})\text{X}}\xspace}
+\DeclareDocumentCommand\PmW{}{\ensuremath{\text{m}_\text{W}\xspace}}
+\DeclareDocumentCommand\PmZ{}{\ensuremath{\text{m}_\text{Z}\xspace}}
+
+\DeclareDocumentCommand\PMuE{}{\ensuremath{\mu_\text{e}}\xspace}
+\DeclareDocumentCommand\pT{}{\ensuremath{p_\text{T}}\xspace}
+\DeclareDocumentCommand\Peta{}{\ensuremath{\eta}\xspace}
+\DeclareDocumentCommand\pTcorr{}{\ensuremath{p_\text{T}^\text{corr}}\xspace}
+\DeclareDocumentCommand\HT{}{\ensuremath{\text{H}_\text{T}}\xspace}
+\DeclareDocumentCommand\pTVec{}{\ensuremath{\vec{\pT}}\xspace}
+\DeclareDocumentCommand\MT{}{\ensuremath{\text{M}_\text{T}}\xspace}
+\DeclareDocumentCommand\pTmiss{}{\ensuremath{\pT^\text{miss}}\xspace}
+\DeclareDocumentCommand\HTmiss{}{\ensuremath{\text{H}_\text{T}^\text{miss}}\xspace}
+\DeclareDocumentCommand\pTmissVec{}{\ensuremath{\vec{\pT}^\text{miss}}\xspace}
+\DeclareDocumentCommand\met{}{\ensuremath{{E}_T^\text{miss}}\xspace}
+
+\DeclareDocumentCommand\njets{}{\ensuremath{N_\text{jets}}\xspace}
+\DeclareDocumentCommand\nbjets{}{\ensuremath{N_\text{b}}\xspace}
+
+\DeclareDocumentCommand\f{mm}{\ensuremath{#1\mathopen{}\left(#2\right)}}
+\DeclareDocumentCommand\amcatnlo{}{\mbox{\textsc{mg5\_amc@nlo}}\xspace}
+\DeclareDocumentCommand\powheg{}{\mbox{\textsc{powheg}}\xspace}
+\DeclareDocumentCommand\mcfm{}{\mbox{\textsc{mcfm}}\xspace}
+\DeclareDocumentCommand\madgraph{}{\mbox{\textsc{Madgraph}}\xspace}
+\DeclareDocumentCommand\pythia{}{\mbox{\textsc{Pythia}}\xspace}
+\DeclareDocumentCommand\PYTHIA{}{\mbox{\textsc{Pythia}}\xspace}
+\DeclareDocumentCommand\geant{}{\mbox{\textsc{Geant}4}\xspace}
+\DeclareDocumentCommand\madspin{}{\mbox{\textsc{Madspin}}}
+\DeclareDocumentCommand\eightTeV{}{\SI{8}{TeV}\xspace}
+\DeclareDocumentCommand\thirteenTeV{}{\SI{13}{TeV}\xspace}
+
+\DeclareRobustCommand{\eg}{e.g.\@\xspace}
+\DeclareRobustCommand{\ie}{i.e.\@\xspace}
+
+\DeclareDocumentCommand\TeV{}{\ensuremath{\text{TeV}}\xspace}
+
+\DeclareDocumentCommand\cB{}{\ensuremath{\bar{c}_{\text{B}}}\xspace}
+\DeclareDocumentCommand\cH{}{\ensuremath{\bar{c}_{\text{H}}}\xspace}
+\DeclareDocumentCommand\cHB{}{\ensuremath{\bar{c}_{\text{HB}}}\xspace}
+\DeclareDocumentCommand\cHu{}{\ensuremath{\bar{c}_{\text{Hu}}}\xspace}
+\DeclareDocumentCommand\cHud{}{\ensuremath{\bar{c}_{\text{Hud}}}\xspace}
+\DeclareDocumentCommand\cHQ{}{\ensuremath{\bar{c}_{\text{HQ}}}\xspace}
+\DeclareDocumentCommand\cpHQ{}{\ensuremath{\bar{c}^{\prime}_{\text{HQ}}}\xspace}
+\DeclareDocumentCommand\cthreeG{}{\ensuremath{\bar{c}_{\text{3G}}}\xspace}
+\DeclareDocumentCommand\cthreeW{}{\ensuremath{\bar{c}_{\text{3W}}}\xspace}
+\DeclareDocumentCommand\ctwoG{}{\ensuremath{\bar{c}_{\text{2G}}}\xspace}
+\DeclareDocumentCommand\cu{}{\ensuremath{\bar{c}_\text{u}}\xspace}
+\DeclareDocumentCommand\cuB{}{\ensuremath{\bar{c}_{\text{uB}}}\xspace}
+\DeclareDocumentCommand\cuG{}{\ensuremath{\bar{c}_{\text{uG}}}\xspace}
+\DeclareDocumentCommand\cuW{}{\ensuremath{\bar{c}_{\text{uW}}}\xspace}
+\DeclareDocumentCommand\tcA{}{\ensuremath{\widetilde{c}_{\text{A}}}\xspace}
+\DeclareDocumentCommand\tcHW{}{\ensuremath{\widetilde{c}_{\text{HW}}}\xspace}
+\DeclareDocumentCommand\tcthreeG{}{\ensuremath{\widetilde{c}_{\text{3G}}}\xspace}
+\DeclareDocumentCommand\doublehat{m}{\ensuremath{\smash{\hat{\hat{#1}}}}}
+
+\DeclareDocumentCommand\sigmaSMNP{}{\ensuremath{\sigma_\text{NP+SM}}\xspace}
+\DeclareDocumentCommand\sigmaSM{}{\ensuremath{\sigma_\text{SM}}\xspace}
+
+\makeatletter
+\DeclareRobustCommand{\etc}{%
+    \@ifnextchar{.}%
+        {etc}%
+        {etc.\@\xspace}%
+}
+\makeatother
+
+
+\setdefaultlanguage[variant=us]{english}
+
+\setmainfont{Libertinus Serif}
+\setmathfont{Libertinus Math}
+
+\frenchspacing
+
+\xapptocmd{\bibsetup}{\singlespacing}{}{}
+
+\addto\captionsenglish{%
+  \renewcommand{\abstractname}{Abstract}
+  \renewcommand{\dedicationname}{\mbox{}}
+  \renewcommand{\prefacename}{Preface}
+  \renewcommand{\acknowledgename}{Acknowledgments}
+  \renewcommand{\symbolsname}{Symbols}
+  \renewcommand{\tablename}{Table}
+  \renewcommand{\figurename}{Figure}
+  \renewcommand{\partname}{Part}
+  \renewcommand{\chaptername}{Chapter}
+  \renewcommand{\appendixname}{Appendix}
+  \renewcommand{\contentsname}{Contents}
+  \renewcommand{\listfigurename}{Figures}
+  \renewcommand{\listtablename}{Tables}
+  \renewcommand{\bibname}{Bibliography}
+  \renewcommand{\indexname}{Index}
+}
+
+\makeatletter
+\g@addto@macro\@floatboxreset\centering
+\makeatother
+
+
+\title{Effective field theory interpretation for measurements of top quark
+pair-production in association with a W or Z boson}
+\author{Anna Elizabeth Woodard}
+\copyrightlicense{\doclicenseText \\ \doclicenseIcon}
+\work{Dissertation}
+\degaward{Doctor of Philosophy}
+\advisor{Kevin Lannon}
+\department{Physics}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+\makecopyright
+
+\begin{abstract}
+  Using effective field theory, the effects of new particles or interactions can
+  be captured in a model-independent way by supplementing the standard model
+  Lagrangian with higher-dimensional operators. A measurement of the cross
+  section for top quarks produced in association with a W or Z boson, using
+  \SI{19.5}{\per\femto\barn} of proton-proton collisions with a center-of-mass energy of
+  \eightTeV, collected by the CMS experiment at the LHC, is extended within this
+  framework to set constraints on the Wilson coefficients of five dimension-six
+  operators. An additional measurement of the same processes using
+  \SI{35.9}{\per\femto\barn} of proton-proton collisions with a center-of-mass energy of
+  \thirteenTeV collected by the CMS experiment is used to perform a more
+  sophisticated study of eight dimension-six operators and present bounds on
+  their Wilson coefficients.
+\end{abstract}
+
+\begin{dedication}
+  Dedicated to Gilbert,
+  despite a talk which began frantically after he sat
+  on my keyboard and deleted my slides
+\end{dedication}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\begin{acknowledge}
+I first thank the Large Hadron Collider accelerator team for their tireless work
+building and running this spectacular machine. I would also like to thank all of
+the members of the Compact Muon Solenoid collaboration. Without the dedication
+of these two groups of people, this dissertation would not have been possible.
+
+At Notre Dame, I have had the good fortune of working with and learning from
+many talented professors. Special thanks are due to my advisor Kevin Lannon. He
+has provided me with guidance, encouragement, and many opportunities to pursue
+interesting research. He has afforded me freedom to work on side projects which
+have significantly enriched my time in graduate school. I am grateful for his
+unwavering support, especially during a period when circumstances required I
+take some time away from school. I am also thankful to Kevin's postdoc Jason
+Slaunwhite and to my fellow student Andrew Brinkerhoff. Jason and Andrew were
+critical to my day-to-day training as a particle physicist. Notre Dame faculty
+members Michael Hildreth, Randy Ruchti, Mitch Wayne, and Colin Jessop deserve
+thanks for creating a great atmosphere for doing particle physics research at
+Notre Dame.
+
+Before graduate school, there were a number of professors at Florida State that
+encouraged me. I would like to thank my undergraduate advisor Volker Crede in
+particular, who gave me my first opportunity to participate in physics research,
+and helped me get started down this path. He took a chance on me, despite having
+me in his introductory physics class, which was before I learned how to study.
+
+My time at CERN and in South Bend have been enormously enriched by the friends I
+have made there. I would like to thank Matthias Wolf especially. We built
+Lobster together, a software tool which has been one of the most rewarding side
+projects I have had the opportunity to work on. I thank him for being such a
+great friend throughout the years. I would also like to thank Ted Kolberg, Jamie
+Antonelli, Sean Lynch, Rachel Yohay, Dave and Kat Morse, Nil Valls, John Wood,
+Nathan Kellams, Michael Planer, Douglas Berry, Tessa Pearson, Allison Reinsvold,
+Fanbo Meng, Sarah Boutle, Chris Neu, Justin Griffiths, Nabarun Dev, Mayukh Raj
+Gangopadhyay, Charlie Mueller, Wuming Luo, Geoffrey Smith, Andrew Wightman,
+Wenzhao Li, Jeff Kolb, and countless others.
+
+I owe a great debt to the many theorists who have helped me along the way. Thank
+you for providing guidance and patiently answering my questions. Special thanks
+go to Adam Martin, Fatimah Elahi, Landon Lehman, Ayan Paul, Joe Bramante, Brian
+Ostdiek, Fabio Maltoni and Eleni Vryonidou.
+
+My analysis depended on Lobster, which could not have been developed without the
+tools and support provided by Douglas Thain's Cooperative Computing Laboratory
+at Notre Dame. I am grateful to Professor Thain for his insight and guidance in
+computing matters. I would also like to thank Benjamin Tovar, Patrick Donnelly,
+Peter Ivie, Haiyan Meng, and the rest of the CCL team. I am also thankful to
+Kevin's postdoc Kenyi Paolo Hurtado Anampa for his friendship and computing
+help. Likewise, my work would not have been possible without Serguei Federov,
+Paul Brenner, Scott Hampton, and the rest of the team at Notre Dame's Center for
+Research Computing. Thanks for putting up with me. Sorry about that time I
+accidentally hammered the cluster with misconfigured jobs writing two hundred
+gigabyte log files. I would also like to thank the CMS CRAB3 team and the HLT
+team. I am forever in the debt of the unnamed masses at Stack Overflow: this
+dissertation would have taken several more years without you.
+
+I am grateful to the 13 TeV ttV team for taking me in: Didar Dobur, Illia
+Khvastunov, Mirena Paneva, and Deniz Poyraz.
+
+I could never have written this dissertation without the love and support of my
+friends and family: my parents, Margaret and Daniel Woodard (who also deserves
+thanks for proofreading this dissertation); my uncle Michael Barnes; my brothers
+and many other cousins, aunts, and uncles; and Nora Jacobsen Ben Hammed, Mallory
+Smith, and Glenn Anderson. Finally, I would like to thank my best friend Amy
+Doran and my husband Orin Harris for their love and support; and to thank Orin
+for his patience, and Amy for her impatience.
+
+\end{acknowledge}
+
+\mainmatter
+
+\include{chapters/introduction}
+\include{chapters/theory}
+\include{chapters/apparatus}
+\include{chapters/objects}
+\include{chapters/8-TeV}
+\include{chapters/13-TeV}
+\include{chapters/eft-analyses}
+\include{chapters/conclusions}
+\appendix
+\include{chapters/reproducibility}
+\include{chapters/2d-scans}
+
+\backmatter
+
+% \bibliographystyle{nddiss2e}
+% \bibliography{physics}
+\nocite{Ellis:2016jkw}
+\singlespacing
+\printbibliography[heading=bibintoc]
+
+\end{document}

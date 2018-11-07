@@ -1,0 +1,19 @@
+\begin{tikzpicture}
+  \begin{feynman}
+    \vertex[blob, minimum size=0.4cm] (v1) {};
+    \vertex[left=of v1] (v6);
+    \vertex[above=of v6] (v7);
+    \vertex[above left=of v7] (p7) {\(\Pg\)};
+    \vertex[above right=of v7] (v8) {\(\overline \Ptop\)};
+    \vertex[below left=of v6] (p10) {\(\Pg\)};
+    \vertex[above right=of v1] (p11) {\(\PZ\)};
+    \vertex[below right=of v1] (p12) {\(\Ptop\)};
+
+    \diagram* {
+      (p7) -- [gluon] (v7) -- [fermion] (v6),
+      (p10) -- [gluon] (v6) -- [fermion, edge label=\(\Ptop\)] (v1),
+      (v8) -- [fermion] (v7),
+      (p11) -- [boson] (v1) -- [fermion] (p12),
+    };
+  \end{feynman}
+\end{tikzpicture}

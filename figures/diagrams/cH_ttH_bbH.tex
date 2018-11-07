@@ -1,0 +1,40 @@
+% to run: lualatex ttZ_EFT.tex
+\RequirePackage{luatex85}
+\documentclass[tikz, border=10pt]{standalone}
+
+\usepackage[compat=1.1.0]{tikz-feynman}
+
+\newcommand{\Ptop}{\ensuremath{\mathrm{t}}}
+\newcommand{\Pg}{\ensuremath{\mathrm{g}}}
+\newcommand{\Pb}{\ensuremath{\mathrm{b}}}
+\newcommand{\Pq}{\ensuremath{\mathrm{q}}}
+\newcommand{\PH}{\ensuremath{\mathrm{H}}}
+\newcommand{\PW}{\ensuremath{\mathrm{W}}}
+\newcommand{\PZ}{\ensuremath{\mathrm{Z}}}
+
+\makeatletter
+\tikzset{
+  position/.style args={#1 degrees from #2}{
+    at=(#2.#1), anchor=#1+180, shift=(#1:\tikz@node@distance)
+  }
+}
+\makeatother
+
+\begin{document}
+\begin{tikzpicture}
+  \begin{feynman}
+    \diagram [arrow size=1pt, horizontal=a to b] {
+      i1 [particle=\(\Pb\)] -- [fermion] a [blob, minimum size=0.4cm] -- [fermion] i2 [particle=\(\overline \Pb\)],
+      a -- [scalar, edge label=\(\PH\)] b,
+      c -- [scalar, edge label=\(\PH\)] b -- [scalar] f2 [particle=\(\PH\)],
+    };
+
+    \vertex [position=45 degrees from c] (d) {\(\overline \Ptop\)};
+    \vertex [position=-45 degrees from c] (e) {\(\Ptop\)};
+
+    \diagram* [arrow size=1pt] {
+      (d) -- [fermion] (c) -- [fermion] (e);
+    };
+  \end{feynman}
+\end{tikzpicture}
+\end{document}

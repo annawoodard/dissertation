@@ -1,0 +1,78 @@
+\chapter{Reproducibility}
+Reproducibility is critical to the scientific method as it is taught, but the
+reality is far from this ideal. Could someone read this dissertation in fifty
+years and reproduce the analysis with only the description it contains? Could a
+junior student in my group extend this work to test something new? These are
+difficult and important questions. In this appendix, I describe the modest
+progress I have made on the least ambitious aspect of reproducibility: Can I
+reliably reproduce my own work?
+
+Analytical research progresses like the growth of a tree, with a multitude of
+related investigations frequently branching off in new directions. A researcher
+focuses on one area, makes improvements, then moves on to another portion of the
+work. Changes in one aspect of the analysis often affect others, but
+disentangling the cause of changes is not always straightforward. Sometimes when
+the researcher returns to a portion of the analysis after some time, it is
+difficult to precisely reproduce the most recent output of that phase of the
+work.
+
+At the start of my graduate studies, my code was a mess\footnote{It is still a
+mess, but it is a slightly more orderly mess.} of scripts, many inherited from
+previous graduate students and in various stages of decay, which I used to
+produce files with names like\footnote{This is an actual example I found deep in
+the detritus of old working directories.}
+
+\mbox{\texttt{test\_new\_June3\_v13\_justOne\_v2\_lepCut\_final\_really\_final.root}}.
+
+As a student, I had the good fortune of participating in the High Energy Physics
+(HEP) computing group, which was a collaboration at Notre Dame between members
+of the experimental HEP group, the Center for Research Computing, and Professor
+Douglas Thain's Cooperative Computing Laboratory in the Computer Science
+department. This fruitful collaboration yielded important progress in the study
+of reproducibility\footnote{Another notable product of this collaboration was a
+software tool for harnessing non-dedicated computing resources for HEP workflows
+called Lobster~\cite{oppo-ccgrid14, 1742-6596-664-3-032035,
+1742-6596-664-6-062038, WoodardWMVTDIAB15, CHEP2016ND, CHEP2016Lobster}, which
+is built on top of Work Queue~\cite{wq} and Parrot, both developed at the
+Cooperative Computing Laboratory. Lobster was critical to the analysis described
+in~\cref{chap:eft}, which would not have been feasible with conventional means
+of accessing computing
+resources.}~\cite{MengTVWW16,1742-6596-664-3-032022,umbrella}. To address the
+problem of being able to reliably reproduce my own work, I made use of a
+software tool called Makeflow~\cite{Albrecht} developed at The Cooperative
+Computing Laboratory.
+
+The code for the EFT analysis described in~\cref{chap:eft} is structured such
+that there is a single entry point executable to which the location of a
+configuration file is passed as an argument. The configuration file specifies
+the location of all inputs, a list of the desired output plots and tables, and a
+path to an output directory. Calling this executable produces an output
+directory at the requested location, where it
+\begin{enumerate}
+  \item copies all of the inputs\footnote{In this case, only the result of the SM analysis, which can be stored in small text files, is versioned. Applying this approach to the SM analysis, which processes much larger input files, would require a more sophisticated method of ensuring preservation of the correct input file versions.} (including the configuration file);
+  \item writes a Makeflow script (which specifies all commands to be run to produce the outputs);
+  \item writes a git patch, allowing one to exactly reproduce the version of the code Makeflow invokes to produce the outputs (even if the researcher has forgotten to commit changes); and
+  \item writes instructions for using these pieces to produce (or reproduce) the outputs, which are saved in the output directory.
+\end{enumerate}
+
+The advantage of this approach is that it allows for versioning not just of the
+code (which is already possible with version control software such as git), but
+also of the inputs and outputs. This makes comparing the results at various
+stages in analysis development relatively straightforward. If any intermediate
+results in the analysis chain (specified in the Makeflow script) in a particular
+output directory are changed, the Makeflow script can be rerun and Makeflow will
+intelligently only update any dependent results. A new git patch will be copied
+such that the output directory always contains the necessary information to
+reproduce the analysis code. This gives users fine-grained control of how often
+to save versions of their output.
+
+I have associated Digital Object Identifiers (DOIs) with the analysis code and
+input file versions used in this dissertation~\cite{anna_woodard_2018_1197392,
+anna_woodard_2018_1197390} and uploaded them to the Zenodo repository. Zenodo
+claims it will maintain access to the code for at least 20 years. This is not
+sufficient to easily reproduce the results of the EFT analysis: even restricting
+our consideration to this simpler case, setting up the proper software
+dependencies and execution environment will still be required. Nevertheless it
+may be a step in the right direction, providing an example which could be
+extended in future analyses as new tools to aid in making scientific work more
+reproducible are developed.

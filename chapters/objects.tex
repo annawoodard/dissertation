@@ -1,0 +1,308 @@
+\chapter{Object reconstruction and selection}
+\label{chap:objects}
+The CMS subdetectors produce raw electrical signals, from which \emph{physics
+objects} are inferred as software representations of particle observables. This
+process is called \emph{reconstruction} and is described
+in~\cref{sec:particle-flow}. In~\cref{sec:object-selection}, the selection
+criteria for physics objects used in this work are discussed. Except where
+noted, features are common to both the \eightTeV measurement (presented
+in~\cref{chap:8-TeV}) and the \thirteenTeV measurement (presented
+in~\cref{chap:13-TeV}).
+
+\section{Particle flow}
+\label{sec:particle-flow}
+CMS uses a reconstruction approach called \emph{Particle Flow} (PF), which takes
+advantage of information provided by each of the CMS subdetectors, as well as
+the correlations between these observations to construct a global picture of
+each event. The following description of the CMS PF algorithms is based on
+reference~\cite{Sirunyan:2017ulk}.
+
+The reconstructed origin of a set of physics objects is called a \emph{vertex}.
+An example of a vertex is the origin of the physics objects emerging from a
+proton-proton collision. As shown in~\cref{fig:luminosity}, each bunch crossing
+results in multiple proton-proton collisions. The majority of these are pileup.
+The vertex for which $\sum\pT^2$ is highest is most likely to be associated with
+the production of heavy particles, and is chosen to be the \emph{primary vertex}
+(PV). For the \eightTeV analysis, the sum is taken over all charged particles
+that were used in the vertex reconstruction. For the \thirteenTeV analysis, the
+sum is taken over all charged leptons and jets formed from charged tracks used
+in the vertex reconstruction, in addition to the \pTmiss, which is computed as
+the magnitude vector sum of \pT from all PF candidates.
+
+An iterative approach is used~\cite{Chatrchyan:2014fea} to reconstruct particle
+trajectories in the inner tracker. Each iteration begins with seeds generated
+from a few tracker hits. Next, trajectories are built by adding hits from
+successive track layers. Finally, track-fitting using a Kalman
+filter~\cite{Fruhwirth:1987fm} is performed to calculate the track origin and
+direction, and the \pT. In each iteration, tracks are subject to quality
+requirements on the seeds, $\chi^2$ fit, vertex compatibility, \pT, $|\eta|$,
+and number of hits. After each iteration, hits that have been assigned to tracks
+are removed from the available hit pool. The first iteration applies stringent
+criteria, which produces a low rate of misreconstructed tracks with moderate
+tracking efficiency. Over 10 total iterations, the criteria are progressively
+relaxed as the algorithms become more complex and time-consuming. After the size
+of the hit pool has been sufficiently reduced, later iterations can perform more
+computationally intensive searches for displaced tracks with secondary vertices
+outside the interaction region (mainly due to photon conversions or nuclear
+interactions in the tracker material, b jets, $\Delta$ decays, \etc)
+
+Most electrons radiate bremsstrahlung photons due to the coulomb field of atomic
+nuclei as they pass through the tracker. These photons are emitted in a
+characteristic arc due to the azimuthal bending of the electron track in the
+magnetic field. To account for these interactions, tracks likely to be electrons
+are selected after the iterative procedure described above based on their number
+of hits and $\chi^2$ fit. The track-fitting is then repeated with a Gaussian Sum
+Filter (GSF)~\cite{0954-3899-31-9-N01}, which approximates the electron energy
+loss as a sum of Gaussian distributions instead of a single Gaussian, resulting
+in an improved momentum resolution.
+
+The determination of particle energy measured in the calorimeters is
+accomplished with a \emph{clustering} algorithm, which takes as input a map of
+individual energy deposits and outputs groupings of energy deposits that can be
+associated with candidate physics objects. First, \emph{cluster seeds} are
+determined by identifying calorimeter cells with energies exceeding a predefined
+threshold. Next, clusters are built up by adding adjacent cells with energy
+deposits exceeding typical electronic noise levels.
+
+After the PF elements have been assembled, a \emph{linking} algorithm evaluates
+the degree of the compatibility between different subdetector elements that are
+nearest neighbors in the $(\phi, \eta)$ plane to determine which are likely to
+be associated with the same particle. Tracks are extrapolated from the last hit
+measured in the tracker to the PS and subsequently to the ECAL and HCAL. If the
+extrapolation falls within the cluster boundaries, a link is established. ECAL
+clusters that are consistent with the extrapolation of tangents from points in
+which inner tracks intersect with tracker layers are linked as possible
+bremsstrahlung photons. Photons have a substantial probability to pair produce
+in the tracker material, so a similar process is used to identify possible
+photon conversions. If the $(\phi, \eta)$ cluster position in the ECAL is within
+the cluster envelope in the HCAL, a link is established. \emph{Global muons} are
+formed if tracks in the inner tracker and tracks in the muon system can be
+linked by interpolating towards each other with an acceptable $\chi^2$.
+\emph{Tracker muons} are formed if the extrapolation out to the muon track from
+the inner track is sufficiently consistent. The highest-quality links are used
+to form sets of PF elements that are linked, or have common elements that are
+linked. These sets are called \emph{blocks}.
+
+Following linking, PF elements are assigned particle identifications. To reduce
+combinatorics, elements are removed from blocks after assignment. Muons are
+assigned first because of the high purity with which they can be reconstructed,
+and they are required to satisfy any of three sets of criteria. Particle
+\emph{isolation} quantifies the degree to which a particle is separated from
+others. Isolated muons are identified if the sum of the track \pT and transverse
+energy of calorimeter deposits in a cone with $R=0.3$ does not exceed
+\SI{10}{\percent} of the muon \pT. Nonisolated muons are identified if they pass
+a more stringent selection~\cite{Chatrchyan:2013sba} optimized for muons within
+jets. Finally, muons that fail the tight selection because of problems with the
+inner track reconstruction, but which have a sufficiently high-quality fit in
+the muon system, are assigned as PF muons and removed from their blocks.
+
+Because of the tendency for electrons to emit bremsstrahlung photons, and for
+photons to pair produce electrons in the tracker material, electrons and
+isolated photons are reconstructed together, following muon reconstruction.
+Electron candidates are seeded with tracks in the inner tracker linked to
+sufficiently large energy deposits in the ECAL. Photon candidates are seeded
+from similar energy deposits that have no linked corresponding inner tracks.
+Electron and photon candidates must meet requirements on the distribution of
+energy deposits in the calorimeters. Photons additionally must be isolated from
+other tracks and energy deposits. A multivariate discriminator based on track
+variables and energy distribution patterns is used to select electrons.
+
+% http://ific.uv.es/tical/Publications/InternalNotes/Nota_Atlfast.pdf
+After muons, electrons, and isolated photons have been classified and removed
+from their blocks, hadrons and nonisolated photons are identified. The majority
+of jet energy is carried by charged hadrons, then photons, and finally neutral
+hadrons. For this reason, within the tracker acceptance, ECAL clusters that are
+not linked to inner tracks are classified as photons, and HCAL clusters that are
+not linked to inner tracks are classified as neutral hadrons. If the calorimeter
+clusters are linked to tracks, each track is assumed to give rise to a charged
+hadron. If the calibrated calorimeter energy is greater than the total track
+momenta by more than what is expected from the energy resolution to measure
+charged hadrons, the surplus is assumed to be carried by photons and neutral
+hadrons: up to the ECAL energy, the surplus is assigned as a photon, and any
+energy above that is assigned as a neutral hadron. Outside of the tracker
+acceptance, where charged and neutral hadrons cannot be distinguished, ECAL
+clusters with no associated HCAL cluster are classified as photons, while ECAL
+clusters that are linked to HCAL clusters are classified as arising from the
+same hadronic shower. The response produced in the ECAL to photons and charged
+hadrons with equivalent energy is different and must be corrected for after
+particle identification has been made.
+
+The anti-$k_t$ algorithm~\cite{1126-6708-2008-04-063} is used to identify which
+PF candidate hadrons belong to the same jet. The quantity
+\begin{eqnarray}
+  d_{ij} = \frac{\Delta_{ij}^2}{R^2 \max(k_{ti}, k_{tj})}
+\end{eqnarray}
+is calculated for all possible candidate pairs $i,j$, where $R$ is a
+characteristic radius parameter, $\Delta_{ij}^2 = (y_i - y_j)^2 +
+(\phi_i-\phi_j)^2$, and $k_{ti}$, $y_i$, and $\phi_i$ are respectively the
+transverse momentum, rapidity, and $\phi$-coordinate of candidate $i$. The pair
+that minimizes $d_{ij}$ is replaced by a clustered candidate with the sum of
+their four-momenta. If all possible $d_{ij} > 1/k_{ti}$ for any candidate, it is
+promoted to a jet and removed from consideration. The process is repeated until
+no candidates remain. If there are many soft particles and only one hard
+particle within a radius $2R$, the minimum $d_{ij}$ will be dominated by the
+momentum of the "seed" hard particle, which will accumulate soft particles,
+resulting in a jet that is a circle around the hard particle in the $\phi-\eta$
+plane of radius R. If there are two hard particles that are more than $R$ apart
+but less than $2R$, there will be two jets, with more of the soft particles
+naturally assigned to the higher-$k_t$ particle. If there are two hard particles
+less than $R$ apart, they will be merged into a single jet.
+
+Anti-$k_t$ jets with $\text{R}=0.5$ are used in the \eightTeV analysis. Because
+the average jet energy increases with increasing center-of-mass energy,
+resulting in narrower jets, the cone size was reduced to $\text{R}=0.4$ in the
+\thirteenTeV analysis.
+
+Because top quarks almost always decay to b quarks, identifying jets from b
+quarks (called \emph{b-tagging}) is critical for selecting \ttW and \ttZ events.
+Because the b quark is the lighter of the third generation quark doublet, it
+decays via a generation-changing process to c or u quarks, which are
+off-diagonal CKM matrix elements and therefore suppressed. This results in a
+substantially longer b quark lifetime than expected for their mass. On the other
+hand, it is short enough that decays still occur inside the detector. The long
+lifetime of b hadrons in jets originating from the hadronization of b quarks
+allows them to travel $\mathcal{O}(\SI{1}{mm})$ before decaying at a displaced
+\emph{secondary vertex}. In the \eightTeV analysis, a Combined Secondary Vertex
+(CSV) b-tagging algorithm was used~\cite{1748-0221-8-04-P04013}. The CSV
+algorithm uses variables related to the distance from a track's point of origin
+to the PV (the impact parameter, or IP) along with secondary vertex information
+to produce a continuous score between zero and one that is assigned to each jet.
+Higher scores indicate that the jet is more likely to have originated from a b
+quark than a light-flavor quark or gluon. In the \thirteenTeV analysis,
+improvements were made to allow for the inclusion of additional variables,
+improving the tagging efficiency by several percentage points, and is referred
+to as CSVv2~\cite{CMS-PAS-BTV-15-001}.
+
+\section{Object selection}
+\label{sec:object-selection}
+Our analyses, like most on CMS, rely on the PF and jet clustering procedure
+described above. Additional requirements, optimized for selecting \ttW and \ttZ
+events, are discussed below.
+
+\subsection{Leptons}
+\label{ssec:leptons}
+For the \ttW and \ttZ measurements, differentiating \emph{prompt} from
+\emph{nonprompt} leptons is critical. Prompt leptons are muons or electrons
+arising either directly from a W or Z boson parent, or from a tau lepton which
+arise directly from a W or Z boson parent. Prompt leptons that have
+misidentified charge are called \emph{charge flip} leptons. Nonprompt leptons
+arise mainly from b hadron decays, misidentified jets, or photon conversions.
+
+Prompt leptons are generally more isolated from other objects in the event than
+nonprompt leptons, which are often produced in hadronic decays. To assess the
+degree of isolation, the scalar sum of PF particles within a cone of $\Delta R =
+\sqrt{\smash[b]{(\Delta \eta)^2 + (\Delta \phi)^2}} = 0.4$ (or $\Delta R = 0.3$
+for electrons in the \thirteenTeV analysis) around the lepton direction is
+calculated. To account for the charged component of pileup, the sum \pT of
+charged particles not originating from the PV is subtracted. To account for the
+neutral component, half of the charged PU contribution is subtracted in the
+\eightTeV analysis. In the \thirteenTeV analysis, a $\rho(\eta)$ correction is
+used as described in~\cref{sec:jet-clustering}. The ratio of this corrected sum
+to the lepton \pT is called the relative isolation. Prompt leptons are also
+characterized by low minimum displacement of the track from the vertex in the
+transverse ($d_{xy}$) and longitudinal ($d_z$) planes, and by the ratio of the
+three-dimensional impact parameter to its uncertainty ($\text{SIP}_\text{3D}$).
+Electrons are additionally required to pass cuts on the score from an ElectronID
+MVA classifier which combines discriminating power from a set of shower-shape,
+track-cluster consistency, and track quality variables. This classifier was
+re-optimized for the \thirteenTeV analysis.
+
+Analysis-specific criteria, along with a description of the different criteria
+categories used for event selection and data-driven background estimations, are
+summarized below for the \eightTeV and \thirteenTeV analyses.
+
+\subsubsection{\eightTeV}
+The \eightTeV analysis imposes requirements related to the properties of the
+nearest jet. A nearby jet with a high CSV value indicates that the lepton is
+likely to be nonprompt, originating from b-hadron decay. Furthermore, the ratio
+of lepton \pT to that of the nearest jet tends to be lower for such leptons.
+
+Four sets of lepton selection criteria are defined: preselected, loose, tight,
+and good charge. Preselected leptons, with criteria designed to select both
+prompt (selected with $\sim \SI{100}{\percent}$ efficiency) and nonprompt
+leptons, are used in the data-driven background estimations described
+in~\cref{sec:8-modeling}. Tight leptons, used to select events in the SS
+dilepton and three lepton channels, must pass more stringent criteria designed
+to accept prompt and reject nonprompt leptons. The efficiency for accepting
+prompt leptons passing the tight criteria is \SIrange{68}{98}{\percent} for
+muons and \SIrange{49}{93}{\percent} for electrons, while \SI{80}{\percent} of
+nonprompt leptons are rejected. Loose leptons, selected with a less stringent
+set of criteria, are used to select events in the OS dilepton and four lepton
+channels, where there are fewer nonprompt leptons. These cuts accept
+\SIrange{93}{99}{\percent} of prompt muons and \SIrange{89}{96}{\percent} of
+prompt electrons while rejecting $\sim \SI{50}{\percent}$ of nonprompt leptons.
+In addition to the preselected, loose, or tight criteria, additional charge ID
+requirements are imposed to reject charge flip leptons. This charge ID cut has
+\SI{99}{\percent} efficiency for right charge muons and rejects $\sim
+\SI{100}{\percent}$ of charge flip muons; for electrons, the efficiency ranges
+from \SIrange{85}{100}{\percent}, while more than \SI{97}{\percent} of charge
+flip electrons are rejected. These four sets of selection criteria are
+summarized in~\cref{tab:8-TeV-leptons}.
+\begin{table}
+  \centering
+  \caption[Lepton Selection Criteria (\eightTeV)]{
+    Lepton Selection Criteria (\eightTeV)
+  }
+  \input{tables/eight-TeV/leptons}
+  \label{tab:8-TeV-leptons}
+\end{table}
+
+\begin{table}
+  \input{tables/thirteen-TeV/leptons}
+\end{table}
+
+\subsubsection{\thirteenTeV}
+\label{subsec:13_lep_selection}
+The \thirteenTeV analysis defines two sets of lepton selection criteria. Loose
+leptons are used in the data-driven background estimations. Tight leptons are
+used to select signal events. Additional quality criteria are imposed,
+corresponding to the medium working point recommended by the muon Physics Object
+Group (POG). These selection criteria are summarized
+in~\cref{tab:13-TeV-leptons}.
+% muon POG MediumID2016 WP: http://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2017/045
+
+
+\subsection{Jets and missing energy}
+\label{sec:jet-clustering}
+Jet energy corrections (JECs), described in detail in
+reference~\cite{1748-0221-12-02-P02014}, are required to calibrate the
+reconstructed jet energy to match the true parton energy. To mitigate the
+effects of pileup, charged hadrons that do not originate from the PV are removed
+before jet clustering as described in reference~\cite{CMS-PAS-JME-14-001}. To
+account for neutral hadrons from pileup, the average energy density as a
+function of the pseudorapidity $\rho(\eta)$ is calculated for each event and,
+for each jet, multiplied by the effective jet area and subtracted. Jets coming
+from pileup vertices are removed using a multivariate
+discriminator~\cite{CMS-PAS-JME-13-005} based on tracking information and jet
+shape, with sensitivity driven by the ratio of the total \pT from charged
+candidates that do not originate from the PV to the total \pT of all charged
+candidates in the jet and the average spread in \pT among jet PF candidates.
+Additional corrections, parameterized in $\eta$ and jet \pT, are applied to
+account for residual differences between data and simulation, and the nonlinear
+detector response to hadrons. To reject fake jets from misreconstruction and
+instrumental noise, jets must have at least two PF constituents and the fraction
+of their energy from the ECAL or HCAL deposits must not exceed
+\SI{99}{\percent}.
+
+Jets with $|\eta| < 2.4$ and $\pT >$ \SI{25}{~GeV} ($\pT >$ \SI{30}{~GeV}) are
+selected for the \eightTeV (\thirteenTeV) analysis. To prevent double counting,
+jets must be separated from the selected leptons by $\Delta R > 0.5$  for the
+\eightTeV analysis and $\Delta R > 0.4$ for the \thirteenTeV analysis.
+
+Loose and medium working points for the b-tagging output discriminant are used,
+defined to operate with a $\approx$\SI{10}{\percent} and
+$\approx$\SI{1}{\percent} chance, respectively to incorrectly tag light quark or
+gluon jets (i.e., to \emph{mistag}). This approach corresponds to an efficiency
+of $\approx$\SI{85}{\percent} to correctly tag b jets for the loose working
+point and $\approx$\SI{70}{\percent} for the medium working point, depending on
+the jet \pT and $\eta$. To satisfy the loose or medium working point,
+$\text{CSV} > 0.244$ and $\text{CSV} > 0.679$ were required respectively for the
+\eightTeV analysis. For the \thirteenTeV analysis, this requirement corresponded
+to $\text{CSVv2} > 0.5426$ and $\text{CSVv2} > 0.8484$.
+
+The \pTmiss is defined as the magnitude of the sum of the negative transverse
+momenta of all of the PF particles. Because pileup can contribute to \pTmiss,
+the \eightTeV analysis makes use of the variable \HTmiss, computed as the sum of
+the negative transverse momenta of selected jets and leptons. The \HTmiss is
+more robust than \pTmiss at the expense of reduced resolution.
+

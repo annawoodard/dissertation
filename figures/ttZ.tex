@@ -1,0 +1,143 @@
+
+\RequirePackage{luatex85}
+\documentclass[tikz, border=10pt]{standalone}
+
+\usepackage[compat=1.1.0]{tikz-feynman}
+
+\newcommand{\Ptop}{\ensuremath{\text{t}}}
+
+\makeatletter
+\tikzset{
+  position/.style args={#1 degrees from #2}{
+    at=(#2.#1), anchor=#1+180, shift=(#1:\tikz@node@distance)
+  }
+}
+\makeatother
+
+\begin{document}
+
+\tikzfeynmanset{
+  proton/.style={
+    draw=black,
+    preaction={
+      draw=black,
+      double,
+      double distance=3pt
+    },
+    /tikzfeynman/with arrow=0.5,
+    % /tikz/postaction={
+    %   /tikz/draw,
+    %   /tikz/
+    %   /tikzfeynman/with arrow=0.5
+    % }
+  }
+}
+\begin{tikzpicture}
+  \begin{feynman}
+    \diagram [horizontal'=hi to hf,tree layout,sibling distance=12mm,level distance=20mm] {
+      % Higgs
+      hi -- [draw=none] t1f,
+      hi -- [scalar,edge label'=\(H\)] hf,
+      hi -- [draw=none] t2f,
+      % τ 1
+      hf -- [fermion,edge label'=\(τ^-\)] t1
+         -- [fermion] n1 [particle=\(\nu_\tau\)],
+      t1 -- [boson,edge label=\(W^-\)] w1
+         -- [fermion] f1 [particle=\(q\)],
+      w1 -- [anti fermion] f2 [particle=\(\overline q'\)],
+      % τ 2
+      hf -- [anti fermion,edge label=\(τ^+\)] t2
+         -- [boson,edge label'=\(W^+\)] w2
+         -- [fermion] f3 [particle=\(q\)],
+      w2 -- [anti fermion] f4 [particle=\(\overline q'\)],
+      t2 -- [anti fermion] n2 [particle=\(\overline \nu_\tau\)],
+      % top
+      t1f -- [anti fermion] b1f [particle=\(\overline b\)],
+      t1f -- [boson,edge label=\(W^-\)] w1f -- [anti fermion] j1 [particle=\(\overline q'\)],
+      w1f -- [fermion] j2 [particle=\(q\)],
+      % other top
+      t2f -- [boson,edge label'=\(W^+\)] w2f -- [fermion] l2 [particle=\(\Pnu_\ell\)],
+      t2f -- [fermion] b2f [particle=\(b\)],
+      w2f -- [anti fermion] l1 [particle=\(\ell^+\)],
+    };
+
+    \vertex[above left=30mm and 6mm of hi] (t2i);
+    \vertex[blob,above left=25mm and 20mm of t2i] (p2) {};
+    \vertex[particle=\(p\),left=25mm of p2] (p2i) {\(p\)};
+    \vertex[above right=5mm and 25mm of p2] (p2f);
+
+    \vertex[below left=30mm and 6mm of hi] (t1i);
+    \vertex[blob,below left=25mm and 20mm of t1i] (p1) {};
+    \vertex[particle=\(p\),left=25mm of p1] (p1i) {\(p\)};
+    \vertex[below right=5mm and 25mm of p1] (p1f);
+
+    \diagram* {
+      {[edges=proton]
+        (p1i) [particle=\(p\)] -- (p1) [blob] -- (p1f),
+        (p2i) [particle=\(p\)] -- (p2) [blob] -- (p2f),
+      },
+      (p1) [blob] -- [gluon,edge label=\(g\)] (t1i),
+      (p2) [blob] -- [gluon,edge label'=\(g\)] (t2i),
+      (hi) -- [anti fermion] (t1i) -- [anti fermion,edge label=\(\overline t\)] (t1f);
+      (hi) -- [fermion] (t2i) -- [fermion,edge label'=\(t\)] (t2f);
+    };
+  \end{feynman}
+\end{tikzpicture}
+% \subfloat[][]{
+  % \feynmandiagram [horizontal=l2 to h] {
+  %   g1 -- [gluon] l1 -- [anti fermion,edge label={t,b}] l2 -- [scalar, edge label=H] h,
+  %   g2 -- [gluon] l3 -- [fermion] l2,
+  %   l3 -- [anti fermion] l1,
+  %   g1 -- [draw=none] g2,
+  % };
+% }
+  % \feynmandiagram [horizontal=v1 to v2] {
+  %   f1 [particle=\(f\)] -- [fermion] v1 -- [boson] v2 -- [boson] v3 [particle={\PW,\PZ}],
+  %   f2 [particle=\(\overline f\)] -- [anti fermion] v1,
+  %   v2 -- [scalar, edge label'=\PH] h1,
+  % };
+  % \label{sfig:hs}
+% }
+
+  % \feynmandiagram [horizontal=h1 to h2] {
+  %   f1 -- [fermion] i1 -- [fermion] f1f [particle=\(f\)],
+  %   i1 -- [boson] h1 -- [boson] i2,
+  %   h1 -- [scalar, edge label'=\PH] h2,
+  %   f2 -- [fermion] i2 -- [fermion] f2f [particle=\(f\)],
+  %   f1 -- [draw=none] f2,
+  %   i1 -- [draw=none] i2,
+  %   f1f -- [draw=none] h2,
+  %   f2f -- [draw=none] h2,
+  % };
+  % \label{sfig:vbf}
+% }
+  % \feynmandiagram [horizontal=h1 to h2] {
+  %   f1 -- [gluon] i1 -- [anti fermion] f1f [particle=\(\overline \Ptop\)],
+  %   i1 -- [fermion] h1 -- [fermion] i2,
+  %   h1 -- [scalar, edge label'=\PH] h2,
+  %   f2 -- [gluon] i2 -- [fermion] f2f [particle=\(\Ptop\)],
+  %   f1 -- [draw=none] f2,
+  %   i1 -- [draw=none] i2,
+  %   f1f -- [draw=none] h2,
+  %   f2f -- [draw=none] h2,
+  % };
+  % \label{sfig:ttH}
+% }
+% \begin{tikzpicture}
+%   \begin{feynman}
+%     \diagram [arrow size=1pt, vertical=a to b] {
+%       i1 [particle=\(\mbox{g}\)] -- [gluon] a -- [fermion] c [blob, minimum size=0.4cm],
+%       a -- [anti fermion, edge label'=\(\mbox{t}\)] b,
+%       f1 [particle=\(\bar{\mbox{t}}\)]-- [fermion] b -- [gluon] f2 [particle=\(\mbox{g}\)],
+%     };
+
+%     \vertex [position=45 degrees from c] (d) {\(\mbox{t}\)};
+%     \vertex [position=-45 degrees from c] (e) {\(\mbox{Z}\)};
+
+%     \diagram* [arrow size=1pt] {
+%       (a) -- [fermion, edge label=\(\mbox{t}\)] (c),
+%       (d) -- [anti fermion] (c) -- [boson] (e);
+%     };
+%   \end{feynman}
+% \end{tikzpicture}
+\end{document}

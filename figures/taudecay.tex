@@ -1,0 +1,18 @@
+\subfloat[][]{
+  \feynmandiagram [layered layout,horizontal=i1 to a] {
+    i1 [particle=\Ptau] -- [fermion] a -- [fermion] f1 [particle=\(\Pnu_\Ptau\)],
+    a -- [boson, edge label'=\PW] b,
+    b -- [anti fermion] f2 [particle=\(\overline \Pnu_\Plep\)],
+    b -- [fermion] f3 [particle=\(\Plep\)],
+  };
+  \label{lepdecay}
+}\hspace{5mm}
+\subfloat[][]{
+  \feynmandiagram [layered layout,horizontal=i1 to a] {
+    i1 [particle=\Ptau] -- [fermion] a -- [fermion] f1 [particle=\(\Pnu_\Ptau\)],
+    a -- [boson, edge label'=\PW] b,
+    b -- [anti fermion] f2 [particle=\(\overline q'\)],
+    b -- [fermion] f3 [particle=\(q\)],
+  };
+  \label{haddecay}
+}

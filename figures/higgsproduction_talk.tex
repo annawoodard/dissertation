@@ -1,0 +1,75 @@
+\begin{tikzpicture}[remember picture]
+  \matrix[ampersand replacement=\&] {
+    \node {
+      \begin{tikzpicture}
+        \begin{feynman}
+          \diagram [small,horizontal=l2 to h,remember picture] {
+            g1 -- [gluon] l1 -- [anti fermion,edge label={\Ptop,\Pb}] l2 -- [scalar, edge label=\PH] h,
+            g2 -- [gluon] l3 -- [fermion] l2,
+            l3 -- [anti fermion] l1,
+            g1 -- [draw=none] g2,
+          };
+        \end{feynman}
+
+        \only<2->{
+          \begin{pgfonlayer}{background}
+            \node[fill=nd@gold,circle,inner sep=3mm,fit=(l2)] {};
+          \end{pgfonlayer}
+          \note[item]{Contrast loop with direct measurement}
+        }
+      \end{tikzpicture}
+    }; \&
+
+    \node {
+      \feynmandiagram [small,horizontal=v1 to v2] {
+        f1 [particle=\(f\)] -- [fermion] v1 -- [boson] v2 -- [boson] v3 [particle={\PW,\PZ}],
+        f2 [particle=\(\overline f\)] -- [anti fermion] v1,
+        v2 -- [scalar, edge label'=\PH] h1,
+      };
+    }; \\
+
+    \node {
+      \feynmandiagram [small,horizontal=h1 to h2] {
+        f1 -- [fermion] i1 -- [fermion] f1f [particle=\(f\)],
+        i1 -- [boson] h1 -- [boson] i2,
+        h1 -- [scalar, edge label'=\PH] h2,
+        f2 -- [fermion] i2 -- [fermion] f2f [particle=\(f\)],
+        f1 -- [draw=none] f2,
+        i1 -- [draw=none] i2,
+        f1f -- [draw=none] h2,
+        f2f -- [draw=none] h2,
+      };
+    }; \&
+
+    \node (mch) {
+      \begin{tikzpicture}
+        \begin{feynman}
+          \diagram [small,horizontal=h1 to h2] {
+            f1 -- [gluon] i1 -- [anti fermion] f1f [particle=\(\overline \Ptop\)],
+            i1 -- [fermion] h1 -- [fermion] i2,
+            h1 -- [scalar, edge label'=\PH] h2,
+            f2 -- [gluon] i2 -- [fermion] f2f [particle=\(\Ptop\)],
+            f1 -- [draw=none] f2,
+            i1 -- [draw=none] i2,
+            f1f -- [draw=none] h2,
+            f2f -- [draw=none] h2,
+          };
+        \end{feynman}
+
+        \only<2->{
+          \begin{pgfonlayer}{background}
+            \node[fill=nd@gold,circle,inner sep=3mm,fit=(h1)] {};
+          \end{pgfonlayer}
+        }
+      \end{tikzpicture}
+    }; \\
+  };
+\end{tikzpicture}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \only<3->{
+    \begin{pgfonlayer}{background}
+      \node[fill=nd@gold,opacity=.4,circle,inner sep=-4mm,fit=(mch)] {};
+    \end{pgfonlayer}
+  }
+\end{tikzpicture}

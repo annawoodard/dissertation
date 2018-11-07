@@ -1,0 +1,53 @@
+\begin{tikzpicture}
+  \begin{feynman}
+    \vertex (hi) {};
+    \diagram [horizontal'=hi to hf,tree layout] {
+      % top
+      % g1 -- [gluon] t1i -- [anti fermion,thick,edge label'=\(\overline t\)]
+      %   t1w -- [anti fermion] b1f [particle=\(\overline b\)],
+      % t1w -- [boson] w1f -- [anti fermion] j1 [particle=\(\overline p'\)],
+      % w1f -- [fermion] j2 [particle=\(p\)],
+      % j1 -- [draw=none] j2,
+      % t1i -- [fermion,thick] hi,
+      % Higgs
+      (hi) -- [scalar,thick,edge label'=\(H\)] hf,
+      % τ 1
+      hf -- [fermion,thick] t1 -- [fermion] n1 [particle=\(\Pnu_\Ptau\)],
+      t1 -- [boson,edge label'=\(W\)] w1 -- [fermion] f1 [particle=\(q\)],
+      w1 -- [anti fermion] f2 [particle=\(\overline q'\)],
+      f1 -- [draw=none] f2,
+      % τ 2
+      hf -- [anti fermion,thick] t2 -- [boson,edge label'=\(W\)] w2 --
+      {f3, f4},
+      % {[fermion] f3 [particle=\(q\)],
+      % [anti fermion] f4 [particle=\(\overline q'\)]},
+      t2 -- [anti fermion] n2 [particle=\(\overline \Pnu_\Ptau\)],
+      f3 -- [draw=none] f4,
+      % other top
+      % g2 -- [gluon] t2i -- [fermion,thick]
+      % t2w -- [boson] w2f -- [fermion] l2 [particle=\(p\)],
+      % t2w -- [fermion] b2f [particle=\(b\)],
+      % w2f -- [anti fermion] l1 [particle=\(\overline p'\)],
+      % t2i -- [fermion,thick] hi,
+
+      % {[same layer] t1i, hi, t2i},
+      % {[same layer] f3, f4, n2},
+    };
+    % \diagram [] {
+    %   p1i [particle=\(p_1\)] -- [fermion,double] g1i [blob] -- [fermion,double] p1f,
+    %   g1i -- [gluon,particle=\(g\)] g1f,
+    %   p2i [particle=\(p^2\)] -- [fermion,double] g2i [blob] -- [fermion,double] p2f,
+    %   g2i -- [gluon,particle=\(g\)] g2f,
+    %   g2f -- [fermion] hi -- [fermion] g1f,
+    % };
+  \end{feynman}
+\end{tikzpicture}
+% \feynmandiagram [horizontal=c to d] {
+%   p2 [particle=\(p\)] -- [fermion,double] b [blob] -- [fermion,double] pp2,
+%   a -- [gluon,edge label'=\(g\)] aa,
+%   b -- [gluon,edge label'=\(g\)] bb,
+%   c -- [fermion] aa -- [fermion,edge label'=\(t\)] t1 -- [fermion] f1 [particle=\(b\)],
+%   t1 -- [edge label'=\(W^+\)] w1 -- [anti fermion,particle=\(\Plep^+\)] l;
+%   c -- [anti fermion] bb -- [anti fermion,edge label'=\(\bar t\)] t2 -- [anti fermion] f2 [particle=\(\bar b\)],
+%   c -- [scalar,edge label'=\(H\)] d,
+% };

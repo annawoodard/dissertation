@@ -1,0 +1,18 @@
+\makeatletter
+\tikzset{
+  position/.style args={#1 degrees from #2}{
+    at=(#2.#1), anchor=#1+180, shift=(#1:\tikz@node@distance)
+  }
+}
+\makeatother
+
+\feynmandiagram [horizontal=h1 to h2] {
+  f1 [particle=\(\Pg\)] -- [gluon] i1 -- [anti fermion] f1f [particle=\(\overline \Ptop\)],
+  i1 -- [fermion] h1 -- [fermion] i2,
+  h1 -- [scalar] h2 [particle=\(\PH\)],
+  f2 [particle=\(\Pg\)] -- [gluon] i2 -- [fermion] f2f [particle=\(\Ptop\)],
+  f1 -- [draw=none] f2,
+  i1 -- [draw=none] i2,
+  f1f -- [draw=none] h2,
+  f2f -- [draw=none] h2,
+};

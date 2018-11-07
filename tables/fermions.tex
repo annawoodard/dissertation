@@ -1,0 +1,29 @@
+\begin{threeparttable}
+  \caption[Fermions of The Standard Model]{
+    Fermions of the Standard Model
+  }
+  \label{tab:fermions}
+  \sisetup{quotient-mode=fraction}
+  \begin{tabular}{
+      llc
+      S[table-format=<3.3e+1]
+    cc}
+    \toprule
+    &          & Symbol                    & {Mass / \si{\GeV}} & {Electric charge / $\abs{\Pe}$} & {\(T_3\)} \\
+    \midrule
+    \multirow{6}{*}{\tikz \node[rotate=90] {Quarks};}
+    & up       & \Pu                       & 2.2e-3             & \(+\,\frac23\)         & \(+\,\frac12\) \\
+    & down     & \Pd                       & 4.7e-3             & \(-\,\frac13\)         & \(-\,\frac12\) \\
+    & charm    & \Pc                       & 1.28               & \(+\,\frac23\)         & \(+\,\frac12\) \\
+    & strange  & \Ps                       & 0.096              & \(-\,\frac13\)         & \(-\,\frac12\) \\
+    & top      & \Ptop                     & 173.1              & \(+\,\frac23\)         & \(+\,\frac12\) \\
+    & bottom   & \Pb                       & 4.18               & \(-\,\frac13\)         & \(-\,\frac12\) \\
+    \midrule
+    \multirow{4}{*}{\tikz \node[rotate=90] {Leptons};}
+    & electron & \Pe                       & 0.51e-3            & \(-\,1\)               & \(-\,\frac12\) \\
+    & muon     & \Pmu                      & 0.106              & \(-\,1\)               & \(-\,\frac12\) \\
+    & tau      & \Ptau                     & 1.777              & \(-\,1\)               & \(-\,\frac12\) \\
+    & neutrino & \(\Pnu_{\Pe,\Pmu,\Ptau}\) & < 20e-3            & \(\phantom{+}\,0\)     & \(+\frac12\) \\
+    \bottomrule
+  \end{tabular}
+\end{threeparttable}

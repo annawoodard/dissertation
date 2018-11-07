@@ -1,0 +1,18 @@
+\begin{subfigure}{0.5\linewidth}
+  \centering
+  \feynmandiagram [horizontal=a to b] {
+    i1 -- [fermion] a -- [fermion] i2,
+    a -- [boson] b,
+    f1 -- [fermion] b -- [fermion] f2,
+  };
+  \caption{}
+  \label{sfig:boson_exchange}
+\end{subfigure}%
+\begin{subfigure}{0.5\linewidth}
+  \centering
+  \feynmandiagram [horizontal=i1 to f2] {
+    {i1, i2} -- [fermion] c [dot] -- [fermion] {f1, f2},
+  };
+  \caption{}
+  \label{sfig:four_fermion}
+\end{subfigure}%

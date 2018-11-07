@@ -1,0 +1,23 @@
+\begin{subfigure}{0.5\linewidth}
+  \centering
+  \feynmandiagram [horizontal=l2 to h] {
+    g1 -- [gluon] l1 -- [anti fermion, edge label={\Ptop, \Pb}] l2 -- [scalar, edge label=\PH] h,
+    g2 -- [gluon] l3 -- [fermion] l2,
+    l3 -- [anti fermion] l1,
+    g1 -- [draw=none] g2,
+  };
+  \caption{}
+  \label{sfig:ggf}
+\end{subfigure}%
+\begin{subfigure}{0.5\linewidth}
+  \centering
+  \feynmandiagram [horizontal=Z to l2] {
+    q1 -- [anti fermion, edge label={\Pb}] l1 -- [anti fermion, edge label={\Ptop}] l2 -- [boson, edge label=\PZ] Z,
+    q2 -- [fermion, edge label={\(\Pbbar\)}] l3 -- [fermion, edge label={\Ptopbar}] l2,
+    l3 -- [boson, edge label={\PW}] l1,
+    q1 -- [draw=none] q2,
+  };
+  \caption{}
+  \label{sfig:tz}
+\end{subfigure}
+% TODO second diagram is reversed (antifermion should be fermion etc)

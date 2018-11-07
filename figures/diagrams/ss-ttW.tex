@@ -1,0 +1,55 @@
+% \tikzfeynmanset{
+%   small,
+% }
+\begin{tikzpicture}
+  \begin{feynman}
+% \diagram [nodes=circle, small, horizontal=v1 to v2, tree layout] {
+%   {z1 - z2, v1 -- v2 -- {v3 -- {p1, p2}, v4 -- {p3, p4}}},
+% };
+%     \vertex[above=of v1] (v7);
+%     \vertex[above left=of v7] (p7) {\(\overline \Pq^\prime\)};
+%     \vertex[above right=of v7] (v8);
+%     \vertex[above right=of v8] (p8) {\(\nu\)};
+%     \vertex[below right=of v8] (p9) {\(\Plep^+\)};
+%     \vertex[below left=of v1] (p10) {\(\Pq\)};
+
+%     \diagram* {
+%       (p7) -- [anti fermion] (v7),
+%       (v1) -- [gluon] (v2),
+%       (p8) -- [anti fermion] (v8) -- [anti fermion] (p9),
+%       (v8) -- [boson, edge label=\(\PW^+\)] (v7),
+%       (p10) -- [fermion] (v1) -- [fermion] (v7),
+%     };
+    \diagram [horizontal'=v1 to v4,tree layout,sibling distance=6mm,level distance=15mm] {
+      v1 -- [anti fermion,edge label'=\(\overline \Ptop\)] v3
+         -- [anti fermion] p1 [particle=\(\overline \Pb\)],
+      v3 -- [boson,edge label=\(\PW^-\)] v5
+         -- [fermion] p2 [particle=\(\Pq\)],
+      v5 -- [anti fermion] p3 [particle=\(\overline \Pq^\prime\)],
+      v1 -- [fermion,edge label=\(\Ptop\)] v2
+         -- [boson,edge label'=\(\PW^+\)] v4
+         -- [fermion] p4 [particle=\(\nu\)],
+         v4 -- [anti fermion] p5 [particle={\(\Plep^+\)}],
+      v2 -- [fermion] p6 [particle=\(\Pb\)],
+    };
+
+    \vertex[left=20mm of v1] (v6);
+    \vertex[above=20mm of v6] (v7);
+    \vertex[above left=4mm and 20mm of v7] (p7) {\(\overline \Pq^\prime\)};
+    \vertex[above right=4mm and 20mm of v7] (v8);
+    \vertex[above right=4mm and 20mm of v8] (p8) {\(\nu\)};
+    \vertex[below right=4mm and 20mm of v8] (p9) {\(\Plep^+\)};
+    \vertex[below left=4mm and 20mm of v6] (p10) {\(\Pq\)};
+
+    \diagram* {
+      (p7) -- [anti fermion] (v7) -- [anti fermion] (v6),
+      (p10) -- [fermion] (v6) -- [gluon] (v1),
+      (p8) -- [anti fermion] (v8) -- [anti fermion] (p9),
+      (v8) -- [boson, edge label=\(\PW^+\)] (v7),
+    };
+  \end{feynman}
+  \begin{pgfonlayer}{background}
+      \node[fill=blue,fill opacity=0.4,circle,inner sep=1mm,fit=(p9)] {};
+      \node[fill=blue,fill opacity=0.4,circle,inner sep=1mm,fit=(p5)] {};
+  \end{pgfonlayer}
+\end{tikzpicture}
